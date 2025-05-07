@@ -2,20 +2,25 @@
 <html>
   <head>
     <title>Stripe Checkout</title>
+    <meta charset="UTF-8" />
   </head>
   <body>
-    <button id="checkout">Pay Now</button>
-
     <script>
-      document.getElementById("checkout").addEventListener("click", async () => {
-        const res = await fetch("https://stripe-checkout-1j4i.onrender.com/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        const data = await res.json();
-        window.location.href = data.url;
-      });
+      // Immediately call the backend to create session and redirect
+      (async () => {
+        try {
+          const res = await fetch("https://stripe-checkout-1j4i.onrender.com/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          window.location.href = data.url;
+        } catch (err) {
+          console.error("Checkout redirect failed:", err);
+          document.body.innerHTML = "<h2>Something went wrong. Please try again later.</h2>";
+        }
+      })();
     </script>
   </body>
 </html>
+
